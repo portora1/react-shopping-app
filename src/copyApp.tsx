@@ -16,7 +16,7 @@ type Bag = {
   count: number;
 };
 
-function App() {
+function CApp() {
   const [money, setMoney] = useState(1000);
   const [bag, setBag] = useState<Bag[]>([]);
   const [total, setTotal] = useState(0);
@@ -36,16 +36,34 @@ function App() {
     },
   ];
 
+  // const handleClick = (product: Product) => {
+  //   bag.map((bagItem) =>
+  //     product.id === bagItem.id
+  //       ? //  既に同じIDがある時の処理
+  //         { ...bagItem, count: bagItem.count + 1 }
+  //       : //  新しく増やす処理
+  //         setBag((item) => [
+  //           ...item,
+  //           {
+  //             ...product,
+  //             count: 1,
+  //           },
+  //         ])
+  //   );
 
+  //   setTotal((total) => total + product.price);
+  // };
   const handleClick = (product: Product) => {
+    // const isAlreadyExtisits = bag.some((bagItem) => bagItem.id === product.id);
     const findedItem = bag.find((bagItem) => bagItem.id === product.id);
 
     console.log(findedItem);
 
-    // addTotal(product);
+    addTotal(product);
     if (findedItem) {
       handleAddCount(findedItem);
 
+      // setTotal((total) => total + product.price);
       return;
     }
 
@@ -56,11 +74,66 @@ function App() {
         count: 1,
       },
     ]);
+
+    // setTotal((total) => total + product.price);
+
+    // isAlreadyExtisits  ? (
+    //   handleAddCount({...product,count:1})
+    // ):(
+    //           setBag((item) => [
+    //           ...item,
+    //           {
+    //             ...product,
+    //             count: 1,
+    //           },
+    //         ]))
   };
 
   const addTotal = (item: Product | Bag) => {
     setTotal((total) => total + item.price);
   };
+
+  // const newItem = {
+  //   id:product.id,
+  //   name:product.name,
+  //   src:product.src,
+  //   price:product.price,
+  //   count:1,
+  // }
+  // setBag((item) => [...item, newItem]);
+
+  //     setBag((item) => [
+  //       ...item,
+  //       {
+  //         id: product.id,
+  //         name: product.name,
+  //         src: product.src,
+  //         price: product.price,
+  //         count: 1,
+  //       },
+  //     ]);
+
+  // setBag((item) => [
+  //   ...item,
+  //   {
+  //     ...product,
+  //     count: 1,
+  //   },
+  // ]);
+
+  // setBag((item) => [
+  //   ...item,
+  //   // bag.filter((item) => product.id === item.id){
+
+  //   // }
+  //   {
+  //     ...product,
+  //     count: 1,
+  //   },
+  // ]);
+
+  // setTotal((total) => total + product.price);
+  // };
 
   const deleteItem = (item: Bag) => {
     const deleteItem = bag.filter((b) => b.id !== item.id);
@@ -78,7 +151,7 @@ function App() {
           : item
       )
     );
-    // addTotal(selectedItem);
+    addTotal(selectedItem);
   };
   const handleSub = (selectedItem: Bag) => {
     setBag((items) =>
@@ -91,14 +164,33 @@ function App() {
           : item
       )
     );
-    // setTotal((total) => total - selectedItem.price);
+    setTotal((total) => total - selectedItem.price);
   };
 
+  // useEffect(() => {
+  //   return () => {
+
+  //   }
+  // },[bag])
+
+  // const memorizeTotal = () => {
+  //   bag.map((item) => {
+  //     if (!item)return 0
+  //     useMemo(()=> {
+  //       return item.price
+  //     },[item.count])
+  //   })
+  //   return
+  // }
+
+  // const memoTotal = (item:Bag) :number=> {
+  //   const memoResult = useMemo(()=>  {
+  //  return memoResult => memoResult + item.price
+  //   },[item.count])
+  // }
+
   const memoResult = useMemo(() => {
-    const result = bag.map((item) => item.price * item.count);
-    return result.reduce((sum,value) => {
-      return sum + value
-    },0)
+    return bag.map((item) => item.price * item.count);
   }, [bag]);
 
   return (
@@ -119,7 +211,6 @@ function App() {
         <h3>合計:{memoResult}円</h3>
         <ul>
           {bag.map((item) => (
-            (item.count > 0 ?
             <div key={item.id}>
               <li>
                 <p>
@@ -131,11 +222,6 @@ function App() {
                 <button onClick={() => handleSub(item)}>-</button>
               </li>
             </div>
-              :
-              <div>
-
-              </div>
-            )
           ))}
         </ul>
       </div>
@@ -143,8 +229,9 @@ function App() {
   );
 }
 
-export default App;
+export default CApp;
 
 // useMemoを使ってバッグの中身の監視して、中身が変わったらTotalを描画する
 // bagのcountが変わった時に、countが増えたら何かにcountが動いた物のpriceを増やす、減ったら減らす
-// 別ファイルにコードを保存
+
+// コメントアウトが煩雑になっているのでスタックのために別ファイルへ
