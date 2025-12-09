@@ -1,44 +1,151 @@
+/* #rootの固定を解除し、コンテンツが中央に配置されるようにする */
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  /* position: fixed; の削除 */
 }
 
+/* ヘッダーエリア */
+.title {
+  /* position: fixed; の削除 */
+  width: 100%;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* 所持金エリア */
+.moneyArea {
+  margin-top: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* 商品一覧エリア */
 .imageArea {
   display: flex;
-  .imgs {
-    width: 200x;
-    height: 200px;
-    border: 2px #888 solid;
-    img {
-      padding: 5px;
-      width: 100%;
-      height: 100%;
-      margin: auto;
-    }
-  }
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 50px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.imageArea > div {
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid transparent;
+  transition: border 0.2s;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.imageArea > div:hover {
+  border: 1px solid #007bff;
+  border-radius: 8px;
 }
+
+.imgs {
+  width: 150px; /* 商品画像のサイズを固定 */
+  height: 150px;
+  border: 2px #888 solid;
+  border-radius: 8px;
+  overflow: hidden; /* 画像がはみ出さないように */
+  background-color: #f9f9f9;
+}
+
+.imgs img {
+  padding: 5px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 画像全体を表示 */
+  display: block;
+}
+
+/* 買い物かごエリア */
+.bag-container {
+  border-top: 1px solid #ccc;
+  padding-top: 20px;
+  margin-top: 50px;
+}
+
+.bag-container h2 {
+  margin-bottom: 15px;
+}
+
+.bag-container ul {
+  list-style: none;
+  padding: 0;
+  min-height: 40vh;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.bag-container li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px dashed #eee;
+  padding: 10px 0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.bag-container li p {
+  margin: 0;
+  flex: 1;
+  text-align: left;
+}
+
+.bag-container li button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.bag-container li button:hover {
+  opacity: 0.8;
+}
+
+.bag-container li p:nth-child(3) { /* 個数表示 */
+    font-weight: bold;
+    color: #333;
+    margin: 0 15px;
+}
+
+/* 商品名と価格の表示エリア */
+.item-info {
+  flex-grow: 1; /* ★追加: 広いスペースを取り、左寄せにする */
+  text-align: left;
+  margin-right: 20px;
+}
+
+/* ボタン群をまとめるコンテナ */
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* ボタン間のスペース */
+}
+
+.item-actions button {
+  /* スタイルを調整 */
+  padding: 4px 8px;
+  font-size: 0.9em;
+}
+
+/* 個数表示 */
+.item-actions p {
+    font-weight: bold;
+    color: #FFFFFFDE;
+    margin: 0; /* マージンをリセット */
+}
+
+/* その他のクラスは省略（今回は使用しないため） */
 
 .card {
   padding: 2em;
 }
-
 .read-the-docs {
   color: #888;
 }

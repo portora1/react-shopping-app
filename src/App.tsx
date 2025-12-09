@@ -19,7 +19,6 @@ type Bag = {
 function App() {
   const [money, setMoney] = useState(1000);
   const [bag, setBag] = useState<Bag[]>([]);
-  const [total, setTotal] = useState(0);
   const products: Product[] = [
     { id: "01", name: "コーヒー", src: "src/assets/coffee.png", price: 100 },
     {
@@ -35,7 +34,6 @@ function App() {
       price: 500,
     },
   ];
-
 
   const handleClick = (product: Product) => {
     const findedItem = bag.find((bagItem) => bagItem.id === product.id);
@@ -58,10 +56,6 @@ function App() {
     ]);
   };
 
-  const addTotal = (item: Product | Bag) => {
-    setTotal((total) => total + item.price);
-  };
-
   const deleteItem = (item: Bag) => {
     const deleteItem = bag.filter((b) => b.id !== item.id);
 
@@ -78,65 +72,68 @@ function App() {
           : item
       )
     );
-    // addTotal(selectedItem);
   };
   const handleSub = (selectedItem: Bag) => {
-    setBag((items) =>
-      items.map((item) =>
+    setBag((items) => {
+      const newBag = items.map((item) =>
         selectedItem.id === item.id
           ? {
               ...item,
               count: item.count - 1,
             }
           : item
-      )
-    );
-    // setTotal((total) => total - selectedItem.price);
+    )
+    return newBag.filter(item => item.count > 0)
+  });
   };
 
   const memoResult = useMemo(() => {
     const result = bag.map((item) => item.price * item.count);
-    return result.reduce((sum,value) => {
-      return sum + value
-    },0)
+    return result.reduce((sum, value) => {
+      return sum + value;
+    }, 0);
   }, [bag]);
 
   return (
     <>
-      <h1>{money}</h1>
-      <div></div>
+      <div className="title">
+        <h1>買い物APP</h1>
+        <h2>所持金:{money}円</h2>
+      </div>
+
       <div className="imageArea">
         {products.map((product) => (
           <div key={product.id} onClick={() => handleClick(product)}>
             <div className="imgs">
               {<img id={product.id} src={product.src} />}
             </div>
+            <p>{product.name}:{product.price}円</p>
           </div>
         ))}
       </div>
-      <div>
+      <div className="bag-container">
         <h2>買い物かご</h2>
         <h3>合計:{memoResult}円</h3>
         <ul>
-          {bag.map((item) => (
-            (item.count > 0 ?
-            <div key={item.id}>
-              <li>
-                <p>
-                  {item.name}:{item.price}円
-                </p>
-                <button onClick={() => deleteItem(item)}>キャンセル</button>
-                <p>個数:{item.count}</p>
-                <button onClick={() => handleAddCount(item)}>+</button>
-                <button onClick={() => handleSub(item)}>-</button>
-              </li>
-            </div>
-              :
-              <div>
-
-              </div>
+          {bag.map((item) =>
+            item.count > 0 ? (
+                <li key={item.id}>
+                  <div className="item-info">
+                    <p>
+                      {item.name}:{item.price}円
+                    </p>
+                  </div>
+                  <div className="item-actions">
+                    <button onClick={() => deleteItem(item)}>キャンセル</button>
+                    <p>個数:{item.count}</p>
+                    <button onClick={() => handleAddCount(item)}>+</button>
+                    <button onClick={() => handleSub(item)}>-</button>
+                  </div>
+                </li>
+            ) : (
+              <div key={item.id}></div>
             )
-          ))}
+          )}
         </ul>
       </div>
     </>
